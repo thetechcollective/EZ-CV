@@ -1,5 +1,5 @@
 import { Injectable, InternalServerErrorException, Logger } from "@nestjs/common";
-import { CreateSectionItemDto, SECTIONFORMAT, UpdateSectionItemDto } from "@reactive-resume/dto";
+import { CreateSectionItemDto, SECTION_FORMAT, UpdateSectionItemDto } from "@reactive-resume/dto";
 import { PrismaService } from "nestjs-prisma";
 
 import {
@@ -108,7 +108,7 @@ export class SectionItemService {
       const { format, data } = createSectionDto;
 
       switch (format) {
-        case "basics": {
+        case SECTION_FORMAT.Basics: {
           const parsedData = parseBasicData(data);
           return await this.prisma.basicsItem.create({
             data: {
@@ -117,7 +117,7 @@ export class SectionItemService {
             },
           });
         }
-        case "profiles": {
+        case SECTION_FORMAT.Profiles: {
           const parsedData = parseProfileData(data);
           return await this.prisma.profileItem.create({
             data: {
@@ -126,7 +126,7 @@ export class SectionItemService {
             },
           });
         }
-        case "experience": {
+        case SECTION_FORMAT.Experience: {
           const parsedData = parseExperienceData(data);
           return await this.prisma.workItem.create({
             data: {
@@ -135,7 +135,7 @@ export class SectionItemService {
             },
           });
         }
-        case "education": {
+        case SECTION_FORMAT.Education: {
           const parsedData = parseEducationData(data);
           return await this.prisma.educationItem.create({
             data: {
@@ -144,7 +144,7 @@ export class SectionItemService {
             },
           });
         }
-        case "skills": {
+        case SECTION_FORMAT.Skills: {
           const parsedData = parseSkillData(data);
           return await this.prisma.skillItem.create({
             data: {
@@ -153,7 +153,7 @@ export class SectionItemService {
             },
           });
         }
-        case "languages": {
+        case SECTION_FORMAT.Languages: {
           const parsedData = parseLanguageData(data);
           return await this.prisma.languageItem.create({
             data: {
@@ -162,7 +162,7 @@ export class SectionItemService {
             },
           });
         }
-        case "awards": {
+        case SECTION_FORMAT.Awards: {
           const parsedData = parseAwardData(data);
           return await this.prisma.awardItem.create({
             data: {
@@ -171,7 +171,7 @@ export class SectionItemService {
             },
           });
         }
-        case "certifications": {
+        case SECTION_FORMAT.Certifications: {
           const parsedData = parseCertificationData(data);
           return await this.prisma.certificationItem.create({
             data: {
@@ -180,7 +180,7 @@ export class SectionItemService {
             },
           });
         }
-        case "interests": {
+        case SECTION_FORMAT.Interests: {
           const parsedData = parseInterestData(data);
           return await this.prisma.interestItem.create({
             data: {
@@ -189,7 +189,7 @@ export class SectionItemService {
             },
           });
         }
-        case "projects": {
+        case SECTION_FORMAT.Projects: {
           const parsedData = parseProjectData(data);
           return await this.prisma.projectItem.create({
             data: {
@@ -198,7 +198,7 @@ export class SectionItemService {
             },
           });
         }
-        case "publications": {
+        case SECTION_FORMAT.Publications: {
           const parsedData = parsePublicationData(data);
           return await this.prisma.publicationItem.create({
             data: {
@@ -207,7 +207,7 @@ export class SectionItemService {
             },
           });
         }
-        case "volunteering": {
+        case SECTION_FORMAT.Volunteering: {
           const parsedData = parseVolunteerData(data);
           return await this.prisma.volunteerItem.create({
             data: {
@@ -216,7 +216,7 @@ export class SectionItemService {
             },
           });
         }
-        case "references": {
+        case SECTION_FORMAT.References: {
           const parsedData = parseReferenceData(data);
           return await this.prisma.referenceItem.create({
             data: {
@@ -225,7 +225,7 @@ export class SectionItemService {
             },
           });
         }
-        case "custom": {
+        case SECTION_FORMAT.Custom: {
           const parsedData = parseCustomData(data);
           return await this.prisma.customItem.create({
             data: {
@@ -251,7 +251,7 @@ export class SectionItemService {
     }
     try {
       switch (format) {
-        case SECTIONFORMAT.Basics: {
+        case SECTION_FORMAT.Basics: {
           const parsedData = parseBasicData(data);
           return await this.prisma.basicsItem.update({
             data: parsedData,
@@ -259,7 +259,7 @@ export class SectionItemService {
           });
         }
 
-        case SECTIONFORMAT.Profiles: {
+        case SECTION_FORMAT.Profiles: {
           const parsedData = parseProfileData(data);
           return await this.prisma.profileItem.update({
             data: parsedData,
@@ -267,7 +267,7 @@ export class SectionItemService {
           });
         }
 
-        case SECTIONFORMAT.Experience: {
+        case SECTION_FORMAT.Experience: {
           const parsedData = parseExperienceData(data);
           return await this.prisma.workItem.update({
             data: parsedData,
@@ -275,7 +275,7 @@ export class SectionItemService {
           });
         }
 
-        case SECTIONFORMAT.Education: {
+        case SECTION_FORMAT.Education: {
           const parsedData = parseEducationData(data);
           return await this.prisma.educationItem.update({
             data: parsedData,
@@ -283,7 +283,7 @@ export class SectionItemService {
           });
         }
 
-        case SECTIONFORMAT.Skills: {
+        case SECTION_FORMAT.Skills: {
           const parsedData = parseSkillData(data);
           return await this.prisma.skillItem.update({
             data: parsedData,
@@ -291,7 +291,7 @@ export class SectionItemService {
           });
         }
 
-        case SECTIONFORMAT.Languages: {
+        case SECTION_FORMAT.Languages: {
           const parsedData = parseLanguageData(data);
           return await this.prisma.languageItem.update({
             data: parsedData,
@@ -299,7 +299,7 @@ export class SectionItemService {
           });
         }
 
-        case SECTIONFORMAT.Awards: {
+        case SECTION_FORMAT.Awards: {
           const parsedData = parseAwardData(data);
           return await this.prisma.awardItem.update({
             data: parsedData,
@@ -307,7 +307,7 @@ export class SectionItemService {
           });
         }
 
-        case SECTIONFORMAT.Certifications: {
+        case SECTION_FORMAT.Certifications: {
           const parsedData = parseCertificationData(data);
           return await this.prisma.certificationItem.update({
             data: parsedData,
@@ -315,7 +315,7 @@ export class SectionItemService {
           });
         }
 
-        case SECTIONFORMAT.Interests: {
+        case SECTION_FORMAT.Interests: {
           const parsedData = parseInterestData(data);
           return await this.prisma.interestItem.update({
             data: parsedData,
@@ -323,7 +323,7 @@ export class SectionItemService {
           });
         }
 
-        case SECTIONFORMAT.Projects: {
+        case SECTION_FORMAT.Projects: {
           const parsedData = parseProjectData(data);
           return await this.prisma.projectItem.update({
             data: parsedData,
@@ -331,7 +331,7 @@ export class SectionItemService {
           });
         }
 
-        case SECTIONFORMAT.Publications: {
+        case SECTION_FORMAT.Publications: {
           const parsedData = parsePublicationData(data);
           return await this.prisma.publicationItem.update({
             data: parsedData,
@@ -339,7 +339,7 @@ export class SectionItemService {
           });
         }
 
-        case SECTIONFORMAT.Volunteering: {
+        case SECTION_FORMAT.Volunteering: {
           const parsedData = parseVolunteerData(data);
           return await this.prisma.volunteerItem.update({
             data: parsedData,
@@ -347,7 +347,7 @@ export class SectionItemService {
           });
         }
 
-        case SECTIONFORMAT.References: {
+        case SECTION_FORMAT.References: {
           const parsedData = parseReferenceData(data);
           return await this.prisma.referenceItem.update({
             data: parsedData,
@@ -355,7 +355,7 @@ export class SectionItemService {
           });
         }
 
-        case SECTIONFORMAT.Custom: {
+        case SECTION_FORMAT.Custom: {
           const parsedData = parseCustomData(data);
           return await this.prisma.customItem.update({
             data: parsedData,
@@ -373,49 +373,49 @@ export class SectionItemService {
     }
   }
 
-  async deleteSectionItem(format: SECTIONFORMAT, id: string) {
+  async deleteSectionItem(format: SECTION_FORMAT, id: string) {
     try {
       switch (format) {
-        case SECTIONFORMAT.Basics: {
+        case SECTION_FORMAT.Basics: {
           return await this.prisma.basicsItem.delete({ where: { id } });
         }
-        case SECTIONFORMAT.Profiles: {
+        case SECTION_FORMAT.Profiles: {
           return await this.prisma.profileItem.delete({ where: { id } });
         }
-        case SECTIONFORMAT.Experience: {
+        case SECTION_FORMAT.Experience: {
           return await this.prisma.workItem.delete({ where: { id } });
         }
-        case SECTIONFORMAT.Education: {
+        case SECTION_FORMAT.Education: {
           return await this.prisma.educationItem.delete({ where: { id } });
         }
-        case SECTIONFORMAT.Skills: {
+        case SECTION_FORMAT.Skills: {
           return await this.prisma.skillItem.delete({ where: { id } });
         }
-        case SECTIONFORMAT.Languages: {
+        case SECTION_FORMAT.Languages: {
           return await this.prisma.languageItem.delete({ where: { id } });
         }
-        case SECTIONFORMAT.Awards: {
+        case SECTION_FORMAT.Awards: {
           return await this.prisma.awardItem.delete({ where: { id } });
         }
-        case SECTIONFORMAT.Certifications: {
+        case SECTION_FORMAT.Certifications: {
           return await this.prisma.certificationItem.delete({ where: { id } });
         }
-        case SECTIONFORMAT.Interests: {
+        case SECTION_FORMAT.Interests: {
           return await this.prisma.interestItem.delete({ where: { id } });
         }
-        case SECTIONFORMAT.Projects: {
+        case SECTION_FORMAT.Projects: {
           return await this.prisma.projectItem.delete({ where: { id } });
         }
-        case SECTIONFORMAT.Publications: {
+        case SECTION_FORMAT.Publications: {
           return await this.prisma.publicationItem.delete({ where: { id } });
         }
-        case SECTIONFORMAT.Volunteering: {
+        case SECTION_FORMAT.Volunteering: {
           return await this.prisma.volunteerItem.delete({ where: { id } });
         }
-        case SECTIONFORMAT.References: {
+        case SECTION_FORMAT.References: {
           return await this.prisma.referenceItem.delete({ where: { id } });
         }
-        case SECTIONFORMAT.Custom: {
+        case SECTION_FORMAT.Custom: {
           return await this.prisma.customItem.delete({ where: { id } });
         }
         default: {

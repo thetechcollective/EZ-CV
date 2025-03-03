@@ -1,4 +1,4 @@
-export enum SECTIONNAMES {
+export enum SECTION_NAMES {
   interests = "Interest",
   education = "Education",
   experience = "Experience",
@@ -16,7 +16,7 @@ export enum SECTIONNAMES {
 }
 
 export function getSectionNameFromId(id: string) {
-  return Object.keys(SECTIONNAMES).includes(id as SECTIONNAMES)
-    ? SECTIONNAMES[id as keyof typeof SECTIONNAMES]
-    : SECTIONNAMES.custom;
+  return Object.keys(SECTION_NAMES).includes(id as SECTION_NAMES)
+    ? SECTION_NAMES[id as keyof typeof SECTION_NAMES]
+    : SECTION_NAMES.custom;
 }
