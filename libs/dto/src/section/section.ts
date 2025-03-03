@@ -19,7 +19,7 @@ import { z } from "zod";
 
 import { userSchema } from "../user";
 
-export enum SECTIONFORMAT {
+export enum SECTION_FORMAT {
   Basics = "basics",
   Profiles = "profiles",
   Experience = "experience",
@@ -38,7 +38,7 @@ export enum SECTIONFORMAT {
 
 export const sectionSchema = z.object({
   id: idSchema,
-  format: z.nativeEnum(SECTIONFORMAT),
+  format: z.nativeEnum(SECTION_FORMAT),
   userId: idSchema,
   user: userSchema,
   data: z.union([
