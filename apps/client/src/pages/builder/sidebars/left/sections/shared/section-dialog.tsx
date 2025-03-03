@@ -2,7 +2,7 @@ import { t } from "@lingui/macro";
 import { createId } from "@paralleldrive/cuid2";
 import { CopySimple, PencilSimple, Plus } from "@phosphor-icons/react";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
-import { SectionFormat } from "@reactive-resume/dto";
+import { SECTIONFORMAT } from "@reactive-resume/dto";
 import type { SectionItem, SectionWithItem } from "@reactive-resume/schema";
 import {
   AlertDialog,
@@ -75,7 +75,7 @@ export const SectionDialog = <T extends SectionItem>({
       sectionName = "Custom";
     }
 
-    const sectionFormat: SectionFormat = SectionFormat[sectionName as keyof typeof SectionFormat];
+    const sectionFormat: SECTIONFORMAT = SECTIONFORMAT[sectionName as keyof typeof SECTIONFORMAT];
 
     if (isCreate || isDuplicate) {
       const dto = await createSectionItem({

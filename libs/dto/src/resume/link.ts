@@ -2,7 +2,7 @@ import { idSchema } from "@reactive-resume/schema";
 import { createZodDto } from "nestjs-zod/dto";
 import { z } from "zod";
 
-import { SectionFormat } from "../section";
+import { SECTIONFORMAT } from "../section";
 
 export const linkSchema = z
   .object({
@@ -16,7 +16,7 @@ export class LinkResumeToItemDto extends createZodDto(linkSchema) {}
 
 export const APIlinkSchema = z
   .object({
-    format: z.nativeEnum(SectionFormat),
+    format: z.nativeEnum(SECTIONFORMAT),
     itemId: idSchema,
     order: z.number(),
   })

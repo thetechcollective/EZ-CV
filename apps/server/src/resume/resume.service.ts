@@ -10,12 +10,12 @@ import {
   ImportResumeDto,
   LinkResumeToItemDto,
   ResumeDto,
-  SectionFormat,
+  SECTIONFORMAT,
   UpdateResumeDto,
 } from "@reactive-resume/dto";
 import { defaultResumeData, ResumeData } from "@reactive-resume/schema";
 import type { DeepPartial } from "@reactive-resume/utils";
-import { ErrorMessage, generateRandomName } from "@reactive-resume/utils";
+import { ERRORMESSAGE, generateRandomName } from "@reactive-resume/utils";
 import slugify from "@sindresorhus/slugify";
 import deepmerge from "deepmerge";
 import { PrismaService } from "nestjs-prisma";
@@ -115,7 +115,7 @@ export class ResumeService {
         select: { locked: true },
       });
 
-      if (locked) throw new BadRequestException(ErrorMessage.ResumeLocked);
+      if (locked) throw new BadRequestException(ERRORMESSAGE.ResumeLocked);
 
       return await this.prisma.resume.update({
         data: {
@@ -156,7 +156,7 @@ export class ResumeService {
       where: { username },
     });
 
-    if (user.profileResumeId == null) throw new BadRequestException(ErrorMessage.NOPUBLICRESUME);
+    if (user.profileResumeId == null) throw new BadRequestException(ERRORMESSAGE.NOPUBLICRESUME);
 
     return await this.prisma.resume.findUniqueOrThrow({
       where: { id: user.profileResumeId },
@@ -189,76 +189,76 @@ export class ResumeService {
     });
   }
 
-  async linkResumeToItem(linkDTO: LinkResumeToItemDto, format: SectionFormat) {
+  async linkResumeToItem(linkDTO: LinkResumeToItemDto, format: SECTIONFORMAT) {
     const { resumeId, itemId, order } = linkDTO;
     try {
       switch (format) {
-        case SectionFormat.Basics: {
+        case SECTIONFORMAT.Basics: {
           return await this.prisma.resumeBasicsItemMapping.create({
             data: { resumeId, basicsItemId: itemId, order },
           });
         }
-        case SectionFormat.Profiles: {
+        case SECTIONFORMAT.Profiles: {
           return await this.prisma.resumeProfileItemMapping.create({
             data: { resumeId, profileItemId: itemId, order },
           });
         }
-        case SectionFormat.Experience: {
+        case SECTIONFORMAT.Experience: {
           return await this.prisma.resumeWorkItemMapping.create({
             data: { resumeId, workItemId: itemId, order },
           });
         }
-        case SectionFormat.Education: {
+        case SECTIONFORMAT.Education: {
           return await this.prisma.resumeEducationItemMapping.create({
             data: { resumeId, educationItemId: itemId, order },
           });
         }
-        case SectionFormat.Skills: {
+        case SECTIONFORMAT.Skills: {
           return await this.prisma.resumeSkillItemMapping.create({
             data: { resumeId, skillItemId: itemId, order },
           });
         }
-        case SectionFormat.Languages: {
+        case SECTIONFORMAT.Languages: {
           return await this.prisma.resumeLanguageItemMapping.create({
             data: { resumeId, languageItemId: itemId, order },
           });
         }
-        case SectionFormat.Awards: {
+        case SECTIONFORMAT.Awards: {
           return await this.prisma.resumeAwardItemMapping.create({
             data: { resumeId, awardItemId: itemId, order },
           });
         }
-        case SectionFormat.Certifications: {
+        case SECTIONFORMAT.Certifications: {
           return await this.prisma.resumeCertificationItemMapping.create({
             data: { resumeId, certificationItemId: itemId, order },
           });
         }
-        case SectionFormat.Interests: {
+        case SECTIONFORMAT.Interests: {
           return await this.prisma.resumeInterestItemMapping.create({
             data: { resumeId, interestItemId: itemId, order },
           });
         }
-        case SectionFormat.Projects: {
+        case SECTIONFORMAT.Projects: {
           return await this.prisma.resumeProjectItemMapping.create({
             data: { resumeId, projectItemId: itemId, order },
           });
         }
-        case SectionFormat.Publications: {
+        case SECTIONFORMAT.Publications: {
           return await this.prisma.resumePublicationItemMapping.create({
             data: { resumeId, publicationItemId: itemId, order },
           });
         }
-        case SectionFormat.Volunteering: {
+        case SECTIONFORMAT.Volunteering: {
           return await this.prisma.resumeVolunteerItemMapping.create({
             data: { resumeId, volunteerItemId: itemId, order },
           });
         }
-        case SectionFormat.References: {
+        case SECTIONFORMAT.References: {
           return await this.prisma.resumeReferenceItemMapping.create({
             data: { resumeId, referenceItemId: itemId, order },
           });
         }
-        case SectionFormat.Custom: {
+        case SECTIONFORMAT.Custom: {
           return await this.prisma.resumeCustomItemMapping.create({
             data: { resumeId, customItemId: itemId, order },
           });
