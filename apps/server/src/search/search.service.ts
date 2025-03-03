@@ -33,14 +33,20 @@ export class SearchService {
       // Get the embedding for the search query
       const searchQueryEmbedding = await this.getEmbedding(searchQuery);
 
-      const searchResults: { userId: string }[] = await this.prisma.$queryRaw`
-        SELECT "userId"
-        FROM searchIndex
-        WHERE embedding < - > ${searchQueryEmbedding}::vector < 1
-        ORDER BY embedding <-> ${searchQueryEmbedding}::vector
+      let searchResults: { userId: string }[];
+      try {
+        searchResults = await this.prisma.$queryRaw`
+          SELECT "userId"
+          FROM searchIndex
+          WHERE embedding <-> ${searchQueryEmbedding}::vector < 1
+          ORDER BY embedding <-> ${searchQueryEmbedding}::vector
           LIMIT ${Number(totalResults)};
-      `;
-
+        `;
+      } catch (queryError) {
+        throw new InternalServerErrorException(
+          `Failed to execute search query: ${queryError.message}`,
+        );
+      }
       // Extract user IDs from the search results
       const userIds = searchResults.map((result: { userId: string }) => result.userId);
 
