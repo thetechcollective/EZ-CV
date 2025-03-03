@@ -74,7 +74,8 @@ export class SearchService {
     if (!data) {
       throw new InternalServerErrorException("Resume not found");
     }
-    const document = data.toString();
+    const document = JSON.stringify(data);
+
     // Get the embedding for the document
     // Then search in database
 
