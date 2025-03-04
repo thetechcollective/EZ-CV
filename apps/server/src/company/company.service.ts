@@ -45,7 +45,7 @@ export class CompanyService {
         data: {
           company: { connect: { id: createCompanyMappingDto.companyId } },
           user: { connect: { id: createCompanyMappingDto.userId } },
-          invitedAt: new Date(),
+          invitedAt: new Date().toString(),
         },
       });
     } catch (error) {
