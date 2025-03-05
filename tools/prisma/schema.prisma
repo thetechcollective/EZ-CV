@@ -314,6 +314,7 @@ model ProfileItem {
   icon                     String?
   description              String?
   ResumeProfileItemMapping ResumeProfileItemMapping[]
+
   @@unique([userId, id])
   @@index(fields: [userId])
 }
@@ -589,12 +590,14 @@ enum COMPANY_STATUS {
 }
 
 model Company {
-  id        String   @id @default(cuid())
-  name      String   @unique
-  ownerId   String
-  owner     User     @relation(fields: [ownerId], references: [id], onDelete: Cascade)
-  updatedAt DateTime @updatedAt
-
+  id             String           @id @default(cuid())
+  name           String           @unique
+  description    String
+  location       String
+  ownerId        String
+  owner          User             @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  updatedAt      DateTime         @updatedAt
+  picture        String?
   CompanyMapping CompanyMapping[]
 }
 
@@ -602,6 +605,6 @@ model Role {
   id        String   @id @default(cuid())
   name      String
   updatedAt String? 
-
+  
   CompanyMapping CompanyMapping[]
 }
