@@ -8,7 +8,10 @@ import { Link, useLoaderData } from "react-router";
 
 import { Icon } from "@/client/components/icon";
 import { ThemeSwitch } from "@/client/components/theme-switch";
+import { mapSections } from "@/client/pages/builder/page";
 import { usePrintResume } from "@/client/services/resume";
+import { useSectionMappings } from "@/client/services/section-mapping";
+import { useSectionMappingStore } from "@/client/stores/section-mapping";
 
 const openInNewTab = (url: string) => {
   const win = window.open(url, "_blank");
@@ -23,19 +26,30 @@ export const PublicProfilePage = () => {
   const { id, title, data: resume } = useLoaderData();
   const format = resume.metadata.page.format as keyof typeof pageSizeMap;
 
+  const mappings = useSectionMappingStore((state) => state.mappings);
+  const setMappings = useSectionMappingStore((state) => state.setMappings);
+  useSectionMappings(id);
+
   const updateResumeInFrame = useCallback(() => {
-    const message = { type: "SET_RESUME", payload: resume };
+    const message = {
+      type: "SET_RESUME",
+      payload: {
+        basics: resume.basics,
+        sections: mapSections(resume.sections, mappings),
+        metadata: resume.metadata,
+      },
+    };
 
     setImmediate(() => {
       frameRef.current?.contentWindow?.postMessage(message, "*");
     });
-  }, [frameRef.current, resume]);
+  }, [frameRef.current, resume, mappings, setMappings]);
 
   useEffect(() => {
     if (!frameRef.current) return;
     frameRef.current.addEventListener("load", updateResumeInFrame);
     return () => frameRef.current?.removeEventListener("load", updateResumeInFrame);
-  }, [frameRef]);
+  }, [frameRef, mappings, setMappings]);
 
   useEffect(() => {
     if (!frameRef.current?.contentWindow) return;
@@ -56,7 +70,7 @@ export const PublicProfilePage = () => {
     return () => {
       frameRef.current?.contentWindow?.removeEventListener("message", handleMessage);
     };
-  }, [frameRef]);
+  }, [frameRef, mappings, setMappings]);
 
   const onDownloadPdf = async () => {
     const { url } = await printResume({ id });

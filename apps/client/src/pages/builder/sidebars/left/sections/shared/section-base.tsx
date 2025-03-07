@@ -16,16 +16,22 @@ import {
 } from "@dnd-kit/sortable";
 import { t } from "@lingui/macro";
 import { Plus } from "@phosphor-icons/react";
-//import { SECTION_FORMAT } from "@reactive-resume/dto";
+import type { SectionMappingDto, SectionMappingItemDto } from "@reactive-resume/dto";
 import type { SectionItem, SectionKey, SectionWithItem } from "@reactive-resume/schema";
 import { Button } from "@reactive-resume/ui";
 import { cn } from "@reactive-resume/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import get from "lodash.get";
+import { useEffect } from "react";
+import { useState } from "react";
 
-//import { linkResumeToItem } from "@/client/services/resume";
+import {
+  useCreateSectionMapping,
+  useDeleteSectionMapping,
+} from "@/client/services/section-mapping";
 import { useDialog } from "@/client/stores/dialog";
 import { useResumeStore } from "@/client/stores/resume";
+import { useSectionMappingStore } from "@/client/stores/section-mapping";
 
 import { SectionIcon } from "./section-icon";
 import { SectionListItem } from "./section-list-item";
@@ -37,15 +43,63 @@ type Props<T extends SectionItem> = {
   description?: (item: T) => string | undefined;
 };
 
+const removeFromMapSections = (mapping: SectionMappingDto, format: string, id: string) => {
+  const result = JSON.parse(JSON.stringify(mapping));
+
+  result[format] = result[format].filter((s: string) => s !== id);
+
+  return result;
+};
+
+const addToMapSections = (
+  mapping: SectionMappingDto,
+  format: string,
+  item: SectionMappingItemDto,
+) => {
+  const result = JSON.parse(JSON.stringify(mapping));
+
+  result[format].push(item.itemId);
+
+  return result;
+};
+
 export const SectionBase = <T extends SectionItem>({ id, title, description }: Props<T>) => {
   const { open } = useDialog(id);
+
+  const mappingData = useSectionMappingStore((state) => state.mappings);
+  const [mappings, setMappingData] = useState<SectionMappingDto>({
+    basics: [],
+    summary: [],
+    experience: [],
+    education: [],
+    skills: [],
+    languages: [],
+    awards: [],
+    certifications: [],
+    interests: [],
+    projects: [],
+    profiles: [],
+    publications: [],
+    volunteer: [],
+    references: [],
+    custom: [],
+  });
+
+  useEffect(() => {
+    setMappingData(mappingData ?? {});
+  }, [mappingData]);
+
+  const setMappings = useSectionMappingStore((state) => state.setMappings);
 
   const setValue = useResumeStore((state) => state.setValue);
   const section = useResumeStore((state) =>
     get(state.resume.data.sections, id),
   ) as SectionWithItem<T>;
 
-  //const resumeId = useResumeStore((state) => state.resume.id);
+  const resumeId = useResumeStore((state) => state.resume.id);
+
+  const { createSectionMapping } = useCreateSectionMapping(resumeId);
+  const { deleteSectionMapping } = useDeleteSectionMapping(resumeId);
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -87,18 +141,19 @@ export const SectionBase = <T extends SectionItem>({ id, title, description }: P
     open("delete", { id, item });
   };
 
-  const onToggleVisibility = (index: number) => {
-    const visible = get(section, `items[${index}].visible`, true);
-    setValue(`sections.${id}.items[${index}].visible`, !visible);
+  const onToggleVisibility = async (item: T, index: number) => {
+    if (mappings[id as keyof SectionMappingDto].includes(item.id)) {
+      await deleteSectionMapping({ resumeId: resumeId, id: item.id, format: id });
+      setMappings(removeFromMapSections(mappings, id, item.id));
+      setValue(`sections.${id}.items[${index}].visible`, false);
+    } else {
+      const data = await createSectionMapping({ resumeId: resumeId, itemId: item.id, format: id });
+      setMappings(addToMapSections(mappings, id, data));
+      setValue(`sections.${id}.items[${index}].visible`, true);
+    }
   };
 
-  /*const onLinkItemToResume = async (item: T) => {
-    await linkResumeToItem(resumeId, {
-      format: SECTION_FORMAT.Education,
-      itemId: item.id,
-      order: 1,
-    });
-  };*/ // Not sure where to use the function
+  if (mappings[id as keyof SectionMappingDto] === undefined) return null;
 
   return (
     <motion.section
@@ -150,6 +205,7 @@ export const SectionBase = <T extends SectionItem>({ id, title, description }: P
                   id={item.id}
                   title={title(item as T)}
                   description={description?.(item as T)}
+                  visible={mappings[id as keyof SectionMappingDto].includes(item.id)}
                   onUpdate={() => {
                     onUpdate(item as T);
                   }}
@@ -160,7 +216,7 @@ export const SectionBase = <T extends SectionItem>({ id, title, description }: P
                     onDuplicate(item as T);
                   }}
                   onToggleVisibility={() => {
-                    onToggleVisibility(index);
+                    void onToggleVisibility(item as T, index);
                   }}
                 />
               ))}

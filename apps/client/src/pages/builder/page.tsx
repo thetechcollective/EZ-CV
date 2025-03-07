@@ -1,5 +1,6 @@
 import { t } from "@lingui/macro";
-import type { ResumeDto } from "@reactive-resume/dto";
+import type { ResumeDto, SectionMappingDto } from "@reactive-resume/dto";
+import type { SectionWithItem } from "@reactive-resume/schema";
 import { useCallback, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import type { LoaderFunction } from "react-router";
@@ -9,8 +10,25 @@ import { useMapSectionsToResume } from "@/client/hooks/use-map-sections-to-resum
 import { queryClient } from "@/client/libs/query-client";
 import { findResumeById } from "@/client/services/resume";
 import { useSections } from "@/client/services/section/sections";
+import { useSectionMappings } from "@/client/services/section-mapping";
 import { useBuilderStore } from "@/client/stores/builder";
 import { useResumeStore } from "@/client/stores/resume";
+import { useSectionMappingStore } from "@/client/stores/section-mapping";
+
+export const mapSections = (sections: SectionWithItem, mapping: SectionMappingDto) => {
+  const result = JSON.parse(JSON.stringify(sections));
+
+  const sectionEntries = Object.entries(sections);
+
+  for (const section of sectionEntries) {
+    const key = section[0] as keyof SectionMappingDto;
+    const value = section[1].items;
+
+    result[key].items = value.filter((s: { id: string }) => mapping[key].includes(s.id));
+  }
+
+  return result;
+};
 
 export const BuilderPage = () => {
   const frameRef = useBuilderStore((state) => state.frame.ref);
@@ -18,7 +36,10 @@ export const BuilderPage = () => {
 
   const resume = useResumeStore((state) => state.resume);
   const title = useResumeStore((state) => state.resume.title);
+  const mappings = useSectionMappingStore((state) => state.mappings);
+  const setMappings = useSectionMappingStore((state) => state.setMappings);
 
+  useSectionMappings(resume.id);
   useSections();
 
   const defaultBasics = {
@@ -53,6 +74,10 @@ export const BuilderPage = () => {
   useMapSectionsToResume();
 
   const syncResumeToArtboard = useCallback(() => {
+    if (Object.values(mappings).length === 0) {
+      return;
+    }
+
     setImmediate(() => {
       if (!frameRef?.contentWindow) return;
       const message = {
@@ -62,13 +87,13 @@ export const BuilderPage = () => {
             resume.data.sections.basics.items.length > 0
               ? resume.data.sections.basics.items[0]
               : defaultBasics,
-          sections: resume.data.sections,
+          sections: mapSections(resume.data.sections as unknown as SectionWithItem, mappings),
           metadata: resume.data.metadata,
         },
       };
       frameRef.contentWindow.postMessage(message, "*");
     });
-  }, [frameRef?.contentWindow, resume.data]);
+  }, [frameRef?.contentWindow, resume.data, mappings, setMappings]);
 
   // Send resume data to iframe on initial load
   useEffect(() => {
@@ -79,7 +104,7 @@ export const BuilderPage = () => {
     return () => {
       frameRef.removeEventListener("load", syncResumeToArtboard);
     };
-  }, [frameRef]);
+  }, [frameRef, mappings, setMappings]);
 
   // Persistently check if iframe has loaded using setInterval
   useEffect(() => {
@@ -93,10 +118,10 @@ export const BuilderPage = () => {
     return () => {
       clearInterval(interval);
     };
-  }, [frameRef]);
+  }, [frameRef, mappings, setMappings]);
 
   // Send resume data to iframe on change of resume data
-  useEffect(syncResumeToArtboard, [resume.data]);
+  useEffect(syncResumeToArtboard, [resume.data, mappings, setMappings]);
 
   return (
     <>
