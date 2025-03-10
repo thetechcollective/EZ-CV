@@ -82,7 +82,8 @@ export const BuilderPage = () => {
   };
 
   const syncResumeToArtboard = useCallback(() => {
-    if (Object.values(mappings).length === 0) {
+    const latestMappings = useSectionMappingStore.getState().mappings;
+    if (Object.values(latestMappings).length === 0) {
       return;
     }
     //It seems useCallback stores the state value of resume when its created and doesnt update it when the value changes, so we get the latest value of resume here
@@ -97,7 +98,7 @@ export const BuilderPage = () => {
             latestResume.data.sections.basics.items.length > 0
               ? latestResume.data.sections.basics.items[0]
               : defaultBasics,
-          sections: mapSections(latestResume.data.sections, mappings),
+          sections: mapSections(latestResume.data.sections, latestMappings),
           metadata: latestResume.data.metadata,
         },
       };
