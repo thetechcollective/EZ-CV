@@ -97,5 +97,4 @@ jobs:
           app-name: "EzCV"
           slot-name: "Production"
           package: release.zip
-          clean: true
-          
+
