@@ -2,7 +2,7 @@ import { t } from "@lingui/macro";
 import { createId } from "@paralleldrive/cuid2";
 import { CopySimple, PencilSimple, Plus } from "@phosphor-icons/react";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
-import { SECTION_FORMAT } from "@reactive-resume/dto";
+import { getSectionFormat, SECTION_FORMAT } from "@reactive-resume/dto";
 import type { SectionItem, SectionWithItem } from "@reactive-resume/schema";
 import {
   AlertDialog,
@@ -74,14 +74,10 @@ export const SectionDialog = <T extends SectionItem>({
   const onSubmit = async (values: T) => {
     if (!section) return;
 
-    let sectionName = section.name;
-    if (sectionName === "Custom Section") {
-      // eslint-disable-next-line lingui/no-unlocalized-strings
-      sectionName = "Custom";
-    }
+    const sectionId = section.id;
 
-    const sectionFormat: SECTION_FORMAT =
-      SECTION_FORMAT[sectionName as keyof typeof SECTION_FORMAT];
+    const sectionFormat = getSectionFormat(sectionId);
+    if (!sectionFormat) throw new Error("Invalid section format");
 
     values.updatedAt = new Date();
 
