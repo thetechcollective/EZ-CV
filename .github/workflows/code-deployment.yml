@@ -21,6 +21,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: create .env for testing
+
+        run: |
+
+          echo "VITE_POSTGRES_PORT=${{ secrets.VITE_POSTGRES_PORT }}" >> .env
+
       - name: Set up Node.js version
 
         uses: actions/setup-node@v3
