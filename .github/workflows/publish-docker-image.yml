@@ -20,11 +20,6 @@ jobs:
     outputs:
       version: ${{ steps.version.outputs.version }}
 
-    strategy:
-      matrix:
-        platform:
-          - linux/amd64
-
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4.1.4
@@ -64,7 +59,7 @@ jobs:
       - name: Prepare a unique name for Artifacts
         id: artifact_name
         run: |
-          name=$(echo -n "${{ matrix.platform }}" | sed -e 's/[ \t:\/\\"<>|*?]/-/g' -e 's/--*/-/g')
+          name=$(echo -n "linux/amd64" | sed -e 's/[ \t:\/\\"<>|*?]/-/g' -e 's/--*/-/g')
           echo "name=$name" >> "$GITHUB_OUTPUT"
 
       - name: Build and Push by Digest
@@ -72,7 +67,7 @@ jobs:
         id: build
         with:
           context: .
-          platforms: ${{ matrix.platform }}
+          platforms: linux/amd64
           labels: ${{ steps.meta.outputs.labels }}
           outputs: type=image,name=${{ env.IMAGE }},push-by-digest=true,name-canonical=true,push=true
           build-args: |
