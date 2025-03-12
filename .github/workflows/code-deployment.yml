@@ -29,8 +29,8 @@ jobs:
         run: |
           npm install -g pnpm
           pnpm install
-          pnpm run build
-          pnpm run test
+          npm run build
+          npm run test
 
       # Zip ONLY what's needed: dist/ + package.json + lockfile
       - name: Zip artifact for deployment
