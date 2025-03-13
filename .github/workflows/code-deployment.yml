@@ -70,6 +70,19 @@ jobs:
         with:
           name: node-app
 
+      - name: Unzip artifact for deployment
+        run: unzip release.zip
+
+      - name: Production dependencies
+        run: |
+          npm install -g pnpm
+          pnpm install --production
+          pnpm list
+
+      - name: Unzip result
+        run: |
+          ls
+
       - name: Login to Azure
         uses: azure/login@v2
         with:
@@ -82,4 +95,4 @@ jobs:
         uses: azure/webapps-deploy@v3
         with:
           app-name: "EzCV"
-          package: release.zip
+          package: .
