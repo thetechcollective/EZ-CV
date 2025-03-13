@@ -25,13 +25,17 @@ jobs:
         with:
           node-version: "22.x"
 
-      - name: Install dependencies, build, and test
+      - name: Install dependencies
         run: |
-          npm install -g pnpm
-          npm install
+          npm install pnpm
           pnpm install
-          npm run build
-          npm run test
+          pnpm list
+
+      - name: Test
+        run: npm run test
+          
+      - name: Build    
+        run: npm run build
 
       # Zip ONLY what's needed: dist/ + package.json + lockfile
       - name: Zip artifact for deployment
