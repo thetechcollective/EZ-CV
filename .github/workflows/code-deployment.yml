@@ -81,7 +81,7 @@ jobs:
       - name: Production dependencies
         run: |
           npm install -g pnpm
-          pnpm install --production --pnpm-lock.yaml
+          pnpm install --production --frozen-lockfile
           pnpm list
 
       - name: Login to Azure
