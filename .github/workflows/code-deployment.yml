@@ -40,11 +40,13 @@ jobs:
       # Zip ONLY what's needed: dist/ + package.json + lockfile
       - name: Zip artifact for deployment
         run: |
+          pnpm install --production
           zip -r release.zip \
             dist \
             package.json \
             package-lock.json \
-            pnpm-lock.yaml
+            pnpm-lock.yaml \
+            node_modules
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
@@ -70,20 +72,6 @@ jobs:
         with:
           name: node-app
 
-      - name: Unzip artifact for deployment
-        run: unzip release.zip
-
-      - name: Set up Node.js version
-        uses: actions/setup-node@v3
-        with:
-          node-version: "22.13.1"
-
-      - name: Production dependencies
-        run: |
-          npm install -g pnpm
-          pnpm install --production
-          pnpm list
-
       - name: Login to Azure
         uses: azure/login@v2
         with:
@@ -96,4 +84,4 @@ jobs:
         uses: azure/webapps-deploy@v3
         with:
           app-name: "EzCV"
-          package: .
+          package: release.zip
