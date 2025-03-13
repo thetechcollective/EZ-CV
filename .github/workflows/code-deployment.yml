@@ -74,8 +74,10 @@ jobs:
 
       - name: Production dependencies
         run: |
+          npm install -g n
+          n 22.13.1
           npm install -g pnpm
-          pnpm install --production
+          pnpm install --production --pnpm-lock.yaml
           pnpm list
 
       - name: Unzip result
