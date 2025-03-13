@@ -43,7 +43,8 @@ jobs:
           zip -r release.zip \
             dist \
             package.json \
-            package-lock.json
+            package-lock.json \
+            pnpm-lock.yaml
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
