@@ -33,8 +33,8 @@ jobs:
 
       - name: Test
         run: npm run test
-          
-      - name: Build    
+
+      - name: Build
         run: npm run build
 
       # Zip ONLY what's needed: dist/ + package.json + lockfile
@@ -70,13 +70,6 @@ jobs:
         with:
           name: node-app
 
-      - name: Unzip artifact for deployment
-        run: unzip release.zip
-
-      - name: Unzip result
-        run: |
-          ls
-
       - name: Login to Azure
         uses: azure/login@v2
         with:
@@ -89,4 +82,4 @@ jobs:
         uses: azure/webapps-deploy@v3
         with:
           app-name: "EzCV"
-          package: .
+          package: release.zip
