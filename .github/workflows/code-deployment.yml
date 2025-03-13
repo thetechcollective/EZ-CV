@@ -28,7 +28,7 @@ jobs:
       - name: Install dependencies, build, and test
         run: |
           npm install -g pnpm
-          pnpm install
+          pnpm install --frozen-lockfile
           npm run prisma:generate
           npm run build
           npm run test
