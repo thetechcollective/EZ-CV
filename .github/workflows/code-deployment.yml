@@ -29,6 +29,7 @@ jobs:
         run: |
           npm install -g pnpm
           pnpm install
+          npm run prisma:generate
           npm run build
           npm run test
 
