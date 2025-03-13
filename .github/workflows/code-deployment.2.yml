@@ -1,4 +1,4 @@
-name: "Manual Deploy to Azure Web App - EzCV-webapp2"
+name: "Manual Deploy to Azure Web App - EzCV-webapp-2"
 
 on:
   workflow_dispatch:
@@ -91,5 +91,5 @@ jobs:
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v3
         with:
-          app-name: "EzCV-webapp2"
+          app-name: "EzCV-webapp-2"
           package: "release.zip"
