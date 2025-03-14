@@ -30,7 +30,6 @@ jobs:
 
           # 1) Install all dependencies, including dev
           pnpm install
-          pnpm prune --prod
           
           # 2) (Optional) Generate Prisma client
           pnpm prisma generate
@@ -41,7 +40,7 @@ jobs:
 
           # 4) Compile NestJS to dist/
           pnpm run build
-
+          
       # Prune dev dependencies so node_modules is production-only
       - name: Prune dev dependencies
         run: |
