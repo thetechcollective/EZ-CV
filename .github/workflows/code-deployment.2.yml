@@ -30,7 +30,8 @@ jobs:
 
           # 1) Install all dependencies, including dev
           pnpm install
-
+          pnpm prune --prod
+          
           # 2) (Optional) Generate Prisma client
           pnpm prisma generate
 
