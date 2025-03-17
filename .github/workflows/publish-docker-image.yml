@@ -3,7 +3,7 @@ name: Publish Docker Image
 on:
   workflow_dispatch:
   push:
-    branch:
+    branches:
       - main
 
 concurrency:
@@ -12,6 +12,10 @@ concurrency:
 
 env:
   IMAGE: mfknudsen/ez-cv
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+permissions:
+  contents: write
 
 jobs:
   build:
@@ -117,7 +121,7 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ github.token }}
 
-      - name: Set up Docker Buildx
+      - name: Set up Docker BuildX
         uses: docker/setup-buildx-action@v3.3.0
 
       - name: Extract Docker Metadata
