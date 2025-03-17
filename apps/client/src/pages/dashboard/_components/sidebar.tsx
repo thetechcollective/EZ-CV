@@ -130,7 +130,8 @@ export const Sidebar = ({ setOpen }: SidebarProps) => {
     userSideBarItems = [
       {
         path: "/publicprofile/" + user.username,
-        name: t`Profile Page`,
+        // eslint-disable-next-line lingui/no-unlocalized-strings
+        name: "Profile Page",
         shortcut: "⇧P",
         icon: <UserAvatar />,
       },
