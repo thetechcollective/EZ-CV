@@ -88,7 +88,7 @@ export const SectionListItem = ({
                 {description && <p className="text-xs leading-relaxed opacity-50">{description}</p>}
               </div>
             </DropdownMenuTrigger>
-            <div className="flex size-6 items-center justify-center">
+            <div className="flex size-6 cursor-pointer items-center justify-center">
               {visible ? (
                 <Eye size={20} onClick={onToggleVisibility} />
               ) : (
