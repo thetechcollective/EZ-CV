@@ -132,20 +132,3 @@ jobs:
           images: |
             ${{ env.IMAGE }}
             ghcr.io/${{ env.IMAGE }}
-
-      - name: Create Docker Manifest List and Push
-        working-directory: /tmp/digests
-        run: |
-          docker buildx imagetools create $(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON") \
-            $(printf '${{ env.IMAGE }}@sha256:%s ' *)
-
-      - name: Inspect Image
-        run: |
-          docker buildx imagetools inspect ${{ env.IMAGE }}:${{ steps.meta.outputs.version }}
-
-      - name: Update Repository Description
-        uses: peter-evans/dockerhub-description@v4.0.0
-        with:
-          repository: ${{ github.repository }}
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_TOKEN }}
