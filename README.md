@@ -19,9 +19,6 @@ The project is made in part of an internship at [The Tech Collective EU](https:/
 [Mfknudsen](https://github.com/Mfknudsen) and
 [SMerved](https://github.com/SMerved).
 
-We aim to expand upon the already existing project by introducing more functionalities such as the option to create and maintain companies which then allow for the elevation of employees to the position of bid-manager,
-and by providing more quality of life updates to already existing features, such as improving the import functionality to provide the user with more options.
-
 The bid-manager role aim to allow companies to bid on projects created by other companies using a collection of cvs created by users on our platform.
 
 We also aim to separate the data so that a user can maintain ownership over their own data and so that they decide who can access it and in what manner they can.
