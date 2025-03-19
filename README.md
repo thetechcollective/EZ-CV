@@ -13,13 +13,13 @@ A free and open-source resume builder that simplifies the process of creating, u
 
 Our work is built upon a fork of [Reactive Resume](https://github.com/AmruthPillai/Reactive-Resume) by [Amruth Pillai](https://www.amruthpillai.com/). Please check out his work.
 
-The project is made in part of an internship at [The Tech Collective EU](https://github.com/thetechcollective) by 
-[KurisuDaNoda](https://github.com/KurisuDaNoda), 
-[MagicalGlove](https://github.com/MagicalGlove), 
+The project is made in part of an internship at [The Tech Collective EU](https://github.com/thetechcollective) by
+[KurisuDaNoda](https://github.com/KurisuDaNoda),
+[MagicalGlove](https://github.com/MagicalGlove),
 [Mfknudsen](https://github.com/Mfknudsen) and
 [SMerved](https://github.com/SMerved).
 
-We aim to expand upon the already existing project by introducing more functionalities such as the option to create and maintain companies which then allow for the elevation of employees to the position of bid-manager, 
+We aim to expand upon the already existing project by introducing more functionalities such as the option to create and maintain companies which then allow for the elevation of employees to the position of bid-manager,
 and by providing more quality of life updates to already existing features, such as improving the import functionality to provide the user with more options.
 
 The bid-manager role aim to allow companies to bid on projects created by other companies using a collection of cvs created by users on our platform.
