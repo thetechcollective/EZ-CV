@@ -1,14 +1,34 @@
 import { Injectable, InternalServerErrorException, Logger } from "@nestjs/common";
+import { PrismaClient } from "@prisma/client";
 import {
   CreateSectionItemDto,
   CreateSectionMappingDto,
   DeleteMappingDto,
+  LinkedInBasics,
+  LinkedInCertification,
+  LinkedInEducation,
+  LinkedInImportSections,
+  LinkedInLanguage,
+  LinkedInProject,
+  LinkedInSkill,
+  LinkedInWork,
+  ResumeDto,
   SECTION_FORMAT,
   SectionMappingDto,
   UpdateSectionItemDto,
 } from "@reactive-resume/dto";
+import {
+  defaultBasics,
+  defaultCertification,
+  defaultEducation,
+  defaultExperience,
+  defaultLanguage,
+  defaultProject,
+  defaultSkill,
+} from "@reactive-resume/schema";
 import { PrismaService } from "nestjs-prisma";
 
+import { ResumeService } from "../resume/resume.service";
 import {
   parseAwardData,
   parseBasicData,
@@ -29,7 +49,10 @@ import {
 
 @Injectable()
 export class SectionItemService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly resumeService: ResumeService,
+  ) {}
 
   async findAll(userId: string) {
     try {
@@ -954,6 +977,132 @@ export class SectionItemService {
           throw new InternalServerErrorException(`Unknown format for ${data.format}`);
         }
       }
+    } catch (error) {
+      Logger.error(error);
+      throw new InternalServerErrorException(error);
+    }
+  }
+
+  async import(
+    userId: string,
+    sections: LinkedInImportSections,
+    createResume: boolean,
+    resumeTitle?: string,
+  ): Promise<{ message: string; insertedData: LinkedInImportSections }> {
+    try {
+      const insertedData: LinkedInImportSections = {};
+      let resume: ResumeDto | null = null;
+
+      if (createResume) {
+        resume = (await this.resumeService.createEmptyResume(
+          userId,
+          resumeTitle,
+        )) as unknown as ResumeDto;
+      }
+
+      const insertItems = async <T>(
+        items: Partial<T>[],
+        model: keyof PrismaClient,
+        defaultValues: Partial<T>,
+        section: SECTION_FORMAT,
+      ): Promise<T[]> => {
+        const prismaModel = this.prisma[model] as PrismaClient[keyof PrismaClient] & {
+          create: (args: unknown) => Promise<T>;
+        };
+        return Promise.all(
+          items.map(async (item, index) => {
+            const createdItem = (await prismaModel.create({
+              data: {
+                ...defaultValues,
+                ...item,
+                userId,
+              },
+            })) as T & { id: string };
+
+            if (createResume && resume) {
+              await this.createMapping({
+                format: section,
+                resumeId: resume.id,
+                itemId: createdItem.id,
+              });
+            }
+
+            return createdItem;
+          }),
+        ) as Promise<T[]>;
+      };
+
+      // Basics
+      if (sections.basics) {
+        insertedData.basics = await insertItems<LinkedInBasics>(
+          sections.basics,
+          "basicsItem",
+          defaultBasics,
+          SECTION_FORMAT.Basics,
+        );
+      }
+
+      // Skills
+      if (sections.skills) {
+        insertedData.skills = await insertItems<LinkedInSkill>(
+          sections.skills,
+          "skillItem",
+          defaultSkill,
+          SECTION_FORMAT.Skills,
+        );
+      }
+
+      // Work
+      if (sections.work) {
+        insertedData.work = await insertItems<LinkedInWork>(
+          sections.work,
+          "workItem",
+          defaultExperience,
+          SECTION_FORMAT.Experience,
+        );
+      }
+
+      // Projects
+      if (sections.projects) {
+        insertedData.projects = await insertItems<LinkedInProject>(
+          sections.projects,
+          "projectItem",
+          defaultProject,
+          SECTION_FORMAT.Projects,
+        );
+      }
+
+      // Education
+      if (sections.education) {
+        insertedData.education = await insertItems<LinkedInEducation>(
+          sections.education,
+          "educationItem",
+          defaultEducation,
+          SECTION_FORMAT.Education,
+        );
+      }
+
+      // Languages
+      if (sections.languages) {
+        insertedData.languages = await insertItems<LinkedInLanguage>(
+          sections.languages,
+          "languageItem",
+          defaultLanguage,
+          SECTION_FORMAT.Languages,
+        );
+      }
+
+      // Certifications
+      if (sections.certifications) {
+        insertedData.certifications = await insertItems<LinkedInCertification>(
+          sections.certifications,
+          "certificationItem",
+          defaultCertification,
+          SECTION_FORMAT.Certifications,
+        );
+      }
+
+      return { message: "Import successful", insertedData };
     } catch (error) {
       Logger.error(error);
       throw new InternalServerErrorException(error);
