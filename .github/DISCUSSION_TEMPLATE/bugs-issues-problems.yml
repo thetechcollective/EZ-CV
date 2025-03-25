@@ -21,6 +21,22 @@ body:
     validations:
       required: true
   - type: textarea
+    id: bugDescription
+    attributes:
+      label: "Description of bug"
+      description: "What happened? Was there an error message?"
+      placeholder: |
+        Examples:
+        - My resumes didn't load and I got a "500 Internal Server Error".
+        - The page didn't load and I got a "404 Not Found" error.
+        - The app froze and I had to restart my phone. No error message was shown.
+        - My computer lit on fire and while looking through the flames, I saw it said "ObjectID is not defined".
+
+        📸 **Screenshots encouraged!** Drag and drop an image here to upload.
+      render: bash
+    validations:
+      required: false
+  - type: textarea
     id: reproduce
     attributes:
       label: "Steps to Reproduce"
@@ -35,26 +51,12 @@ body:
         More details = Easier fixing!
       render: bash
     validations:
-      required: true
-  - type: textarea
-    id: bugDescription
-    attributes:
-      label: "Description of bug"
-      description: "What happened? Was there an error message?"
-      placeholder: |
-        Examples:
-        - My resumes didn't load and I got a "500 Internal Server Error".
-        - The page didn't load and I got a "404 Not Found" error.
-        - The app froze and I had to restart my phone. No error message was shown.
-        - My computer lit on fire and while looking through the flames, I saw it said "ObjectID is not defined".
-      render: bash
-    validations:
-      required: true
+      required: false
   - type: dropdown
     id: systemInfo
     attributes:
       label: Which system are you on?
-      description: "If your browser is not listed, please select 'Other' and specify your browser in the next question."
+      description: "If your system is not listed, please select 'Other' and specify your system in the next question."
       options:
         - Windows 11
         - Windows 10
