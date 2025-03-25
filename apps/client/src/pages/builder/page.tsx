@@ -6,10 +6,11 @@ import { Helmet } from "react-helmet-async";
 import type { LoaderFunction } from "react-router";
 import { redirect } from "react-router";
 
+import { SECTION_MAPPING_KEY } from "@/client/constants/query-keys";
 import { queryClient } from "@/client/libs/query-client";
 import { findResumeById } from "@/client/services/resume";
 import { useSections } from "@/client/services/section/sections";
-import { useSectionMappings } from "@/client/services/section-mapping";
+import { fetchSectionMappings } from "@/client/services/section-mapping";
 import { useBuilderStore } from "@/client/stores/builder";
 import { useResumeStore } from "@/client/stores/resume";
 import { useSectionMappingStore } from "@/client/stores/section-mapping";
@@ -50,7 +51,6 @@ export const BuilderPage = () => {
   const mappings = useSectionMappingStore((state) => state.mappings);
   const setMappings = useSectionMappingStore((state) => state.setMappings);
 
-  useSectionMappings(resume.id);
   useSections();
 
   const syncResumeToArtboard = useCallback(() => {
@@ -132,6 +132,13 @@ export const builderLoader: LoaderFunction<ResumeDto> = async ({ params }) => {
 
     useResumeStore.setState({ resume });
     useResumeStore.temporal.getState().clear();
+
+    const mappings = await queryClient.fetchQuery({
+      queryKey: [SECTION_MAPPING_KEY, { id }],
+      queryFn: () => fetchSectionMappings(id),
+    });
+
+    useSectionMappingStore.setState({ mappings });
 
     return resume;
   } catch {
