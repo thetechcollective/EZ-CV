@@ -119,7 +119,7 @@ export const ImportDialog = () => {
       if (error instanceof ZodError) {
         setValidationResult({
           isValid: false,
-          errors: error.toString(),
+          errors: error.errors.map((e) => e.message).join("\n"),
         });
 
         toast({
@@ -285,9 +285,9 @@ export const ImportDialog = () => {
             {validationResult?.isValid === false && (
               <div className="space-y-2">
                 <Label className="text-error">{t`Errors`}</Label>
-                <ScrollArea orientation="vertical" className="h-[180px]">
+                <ScrollArea orientation="vertical">
                   <div className="whitespace-pre-wrap rounded bg-secondary-accent p-4 font-mono text-xs leading-relaxed">
-                    {JSON.stringify(JSON.parse(validationResult.errors), null, 4)}
+                    {validationResult.errors}
                   </div>
                 </ScrollArea>
               </div>
