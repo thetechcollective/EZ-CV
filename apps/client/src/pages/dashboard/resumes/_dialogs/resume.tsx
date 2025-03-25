@@ -1,6 +1,7 @@
 /* eslint-disable lingui/no-unlocalized-strings */
 import { zodResolver } from "@hookform/resolvers/zod";
 import { t } from "@lingui/macro";
+import { createId } from "@paralleldrive/cuid2";
 import { CaretDown, Flask, MagicWand, Plus } from "@phosphor-icons/react";
 import type { ResumeDto } from "@reactive-resume/dto";
 import { createResumeSchema } from "@reactive-resume/dto";
@@ -95,7 +96,13 @@ export const ResumeDialog = () => {
 
     if (isDuplicate) {
       if (!payload.item?.id) return;
-
+      //Check if basics.id exist to get around validation
+      const {
+        data: { basics },
+      } = payload.item;
+      if (!basics.id) {
+        basics.id = createId();
+      }
       await duplicateResume({
         title: values.title,
         slug: values.slug,
