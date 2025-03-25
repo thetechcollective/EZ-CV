@@ -63,13 +63,13 @@ export const ContactCard = () => (
     </CardContent>
     <CardFooter className="space-x-4">
       <a
-        href="https://github.com/The-Elite-Task-Force/EZ-CV/discussions/new/choose"
+        href="https://github.com/The-Elite-Task-Force/EZ-CV/issues/new/choose"
         className={cn(buttonVariants({ size: "sm" }))}
         rel="noopener noreferrer nofollow"
         target="_blank"
       >
         <GithubLogo size={14} weight="bold" className="mr-2" />
-        <span className="line-clamp-1">Start discussion</span>
+        <span className="line-clamp-1">Create Issue</span>
       </a>
 
       <a

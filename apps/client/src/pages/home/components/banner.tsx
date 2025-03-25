@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 
 export const Banner = () => (
   <motion.a
-    href="https://github.com/The-Elite-Task-Force/EZ-CV/discussions"
+    href="https://github.com/The-Elite-Task-Force/EZ-CV/issues/new/choose"
     target="_blank"
     whileHover={{ height: 48 }}
     initial={{ opacity: 0, y: -50, height: 32 }}
@@ -15,7 +15,7 @@ export const Banner = () => (
     <GithubLogo weight="bold" size={14} className="shrink-0" />
     <span>
       Please be aware this version is in beta State. All data will be potentialy lost when the final
-      version is released. Click here to join the discussion.
+      version is released. Click here to raise an issue or join the discussion.
     </span>
   </motion.a>
 );

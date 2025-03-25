@@ -166,7 +166,7 @@ export const Sidebar = ({ setOpen }: SidebarProps) => {
         variant="ghost"
         onClick={() => {
           const win = window.open(
-            "https://github.com/The-Elite-Task-Force/EZ-CV/discussions",
+            "https://github.com/The-Elite-Task-Force/EZ-CV/issues/new/choose",
             "_blank",
           );
           win?.focus();
