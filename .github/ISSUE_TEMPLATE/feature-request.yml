@@ -1,0 +1,25 @@
+name: ✨ Feature Request
+
+description: Suggest an feature or idea that you would like to see in EzCV
+
+title: "[Feature] <title>"
+labels: [feature, user-made]
+
+body:
+  - type: textarea
+    attributes:
+      label: Feature Description
+      description: A concise description of what feature you would like to see in Reactive Resume.
+    validations:
+      required: true
+  - type: dropdown
+    id: priority
+    attributes:
+      label: "How important is this feature?"
+      options:
+        - Low
+        - Medium
+        - High
+        - Must-have
+    validations:
+      required: true

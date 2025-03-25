@@ -31,8 +31,6 @@ body:
         - The page didn't load and I got a "404 Not Found" error.
         - The app froze and I had to restart my phone. No error message was shown.
         - My computer lit on fire and while looking through the flames, I saw it said "ObjectID is not defined".
-
-        📸 **Screenshots encouraged!** Drag and drop an image here to upload.
       render: bash
     validations:
       required: false
