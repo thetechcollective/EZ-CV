@@ -1,10 +1,11 @@
-name: Deploy
+name: Database Migrations Dev
 on:
   push:
     paths:
       - tools/prisma/schema.prisma
     branches:
       - main
+  workflow_dispatch:
 
 env:
   DATABASE_URL: ${{ secrets.DATABASE_URL }}
