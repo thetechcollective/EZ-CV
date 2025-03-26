@@ -8,8 +8,10 @@ import {
   defaultLanguage,
   defaultProfile,
   defaultProject,
+  defaultReference,
   defaultResumeData,
   defaultSkill,
+  defaultUrl,
   resumeDataSchema,
 } from "@reactive-resume/schema";
 import type { Json } from "@reactive-resume/utils";
@@ -181,6 +183,21 @@ export class LinkedInParser implements Parser<JSZip, LinkedIn> {
         });
       }
     }
+
+    // References
+    if (data.Recommendations_Received && data.Recommendations_Received.length > 0) {
+      for (const reference of data.Recommendations_Received) {
+        result.sections.references.items.push({
+          ...defaultReference,
+          id: createId(),
+          name: `${reference["First Name"]} ${reference["Last Name"]}`,
+          description: reference.Company,
+          summary: reference.Text ?? "",
+          url: defaultUrl,
+        });
+      }
+    }
+
     result.sections.basics.items[0].id = createId();
     return resumeDataSchema.parse(result);
   }
