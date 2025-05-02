@@ -23,6 +23,7 @@ import { SectionItemModule } from "./sectionItem/section-item.module";
 import { StorageModule } from "./storage/storage.module";
 import { TranslationModule } from "./translation/translation.module";
 import { UserModule } from "./user/user.module";
+import { VariantModule } from "./variant/variant.module";
 
 @Module({
   imports: [
@@ -45,6 +46,7 @@ import { UserModule } from "./user/user.module";
     SectionItemModule,
     SearchModule,
     CompanyModule,
+    VariantModule,
     MetricsModule,
 
     // Static Assets
