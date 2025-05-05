@@ -7,6 +7,7 @@ export type DialogName =
   | "import"
   | "two-factor"
   | "company"
+  | "project"
   | "translate"
   | SectionKey;
 
