@@ -20,10 +20,7 @@ describe("VariantController", () => {
 
     mockResumeService = {};
 
-    controller = new VariantController(
-      mockResumeService as ResumeService,
-      mockVariantService as VariantService,
-    );
+    controller = new VariantController(mockVariantService as VariantService);
   });
 
   afterEach(() => {

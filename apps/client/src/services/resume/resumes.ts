@@ -6,7 +6,7 @@ import { RESUMES_KEY } from "@/client/constants/query-keys";
 import { axios } from "@/client/libs/axios";
 
 export const fetchResumes = async () => {
-  const response = await axios.get<ResumeDto[], AxiosResponse<ResumeDto[]>>("/resume");
+  const response = await axios.get<ResumeDto[], AxiosResponse<ResumeDto[]>>("/resume/all");
 
   return response.data;
 };
