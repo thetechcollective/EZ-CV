@@ -1,0 +1,16 @@
+{
+  "name": "EZ-CV-Reworked",
+	"workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": "."
+  },
+  "features": {
+    "ghcr.io/devcontainers/features/github-cli:1": {},
+    "ghcr.io/devcontainers-extra/features/fish-apt-get:1": {}
+  },
+  "forwardPorts": [5173],
+  "initializeCommand": "./.devcontainer/initializeCommand.sh",
+	"postCreateCommand": "./.devcontainer/postCreateCommand.sh",
+  "remoteUser": "node"
+}
